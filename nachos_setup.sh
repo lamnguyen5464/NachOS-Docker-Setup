@@ -1,11 +1,5 @@
 
-# in ubuntu
-apt-get update
-apt-get install sudo
-sudo apt install vim
 
-sudo apt-get install git
-sudo apt-get install ed
 
 sudo apt-get install build-essential
 sudo apt-get install wget
@@ -27,7 +21,14 @@ cd nachos
 
 # wget https://www.fit.hcmus.edu.vn/~ntquan/os/assignment/nachos_40.tar.gz
 # tar zxvf nachos_40.tar.gz
-git clone https://github.com/lamnguyen5464/NachOS-Source.git
+
+if [ "$1" ]
+   	then
+	git clone -b "$1" https://github.com/lamnguyen5464/NachOS-Source.git 
+ else
+	git clone -b stable https://github.com/lamnguyen5464/NachOS-Source.git
+ fi
+
 mv NachOS-Source NachOS-4.0
 
 wget https://www.fit.hcmus.edu.vn/~ntquan/os/assignment/mips-decstation.linux-xgcc.gz
@@ -47,6 +48,6 @@ make
 
 cd ../../coff2noff
 make
-cd ../code/test
-make
-../build.linux/nachos -x halt
+# cd ../code/test
+# make
+# ../build.linux/nachos -x halt
