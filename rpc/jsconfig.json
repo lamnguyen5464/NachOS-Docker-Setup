@@ -1,0 +1,18 @@
+{
+    "compilerOptions": {
+        "allowSyntheticDefaultImports": true,
+        "esModuleInterop": true,
+        "isolatedModules": true,
+        "lib": ["es6"],
+        "moduleResolution": "node",
+        "noEmit": true,
+        "strict": true,
+        "target": "esnext",
+        "noImplicitAny": false,
+        "baseUrl": "./src",
+        "paths": {
+        }
+    },
+    "include": ["src"],
+    "exclude": ["node_modules", "babel.config.js",]
+}
