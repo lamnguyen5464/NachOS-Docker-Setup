@@ -1,5 +1,5 @@
 const express = require('express');
-const { exec } = require('child_process');
+const { spawn } = require('child_process');
 
 var cors = require('cors');
 const app = express();
@@ -15,30 +15,43 @@ app.get('/', (req, res) => {
     });
 });
 
+let isBlocked = false;
 app.post('/', (req, res) => {
     const { branch = 'stable', test = 'add' } = req.body || {};
     console.log(`implement on ${branch} with ${test}.....`);
 
-    exec(`bash nachos_setup.sh ${branch} && bash run.sh ${test}`, (error, stdout, stderr) => {
-        if (error) {
-            console.log(`error: ${error.message}`);
-            res.send(error);
-            return;
-        }
-        if (stderr) {
-            console.log(`stderr: ${stderr}`);
-            res.send(stderr);
-            return;
-        }
+    if (isBlocked) {
+        res.send('NachOS server is busy, please try later');
+        return;
+    }
 
-        const ans = stdout.substring(stdout.length - 1000);
+    isBlocked = true;
 
+    let ans = '';
+    var child = spawn('bash', ['execute_api.sh', branch, test]);
+
+    const onAppendData = data => {
+        console.log(data);
+        ans = ans + data;
+    };
+
+    child.stdout.setEncoding('utf8');
+    child.stdout.on('data', onAppendData);
+    child.stderr.setEncoding('utf8');
+    child.stderr.on('data', onAppendData);
+
+    child.on('close', function (code) {
+        isBlocked = false;
+        console.log(`End of ${code}`);
         res.send(ans);
-        console.log(`stdout: ${ans}`);
     });
+
+    setTimeout(() => {
+        isBlocked = false;
+    }, 1000 * 60 * 5);
 });
 
 const port = process.env.PORT || 3003;
 app.listen(port, () => {
     console.log(`Server is running...`);
-});
+}).setTimeout(1000 * 60 * 60);

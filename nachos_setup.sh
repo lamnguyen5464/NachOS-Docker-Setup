@@ -1,19 +1,6 @@
 
 
 
-sudo apt-get install build-essential
-sudo apt-get install wget
-sudo apt-get install tar
-sudo apt-get install gcc-multilib g++-multilib
-sudo apt-get install lib32ncurses5 lib32z1
-sudo apt-get install gcc-4.8 gcc-4.8-multilib g++-4.8 g++-4.8-multilib
-sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-4.8 40
-sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-4.8 40
-gcc -v
-g++ -v
-
-dpkg --print-architecture
-sudo dpkg --add-architecture i386
 
 rm nachos -rf
 mkdir nachos
