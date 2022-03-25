@@ -16,8 +16,9 @@ app.get('/', (req, res) => {
 });
 
 let isBlocked = false;
+
 app.post('/', (req, res) => {
-    const { branch = 'stable', test = 'add' } = req.body || {};
+    const { test = 'add', branch = 'stable' } = req.body || {};
     console.log(`implement on ${branch} with ${test}.....`);
 
     if (isBlocked) {
@@ -27,12 +28,14 @@ app.post('/', (req, res) => {
 
     isBlocked = true;
 
+    const useCache = true;
     let ans = '';
-    var child = spawn('bash', ['execute_api.sh', branch, test]);
+    var child = spawn('bash', ['nachos_setup.sh', branch, test, useCache]);
 
     const onAppendData = data => {
         console.log(data);
         ans = ans + data;
+        // ans = ans.substring(ans.length - 5000);
     };
 
     child.stdout.setEncoding('utf8');

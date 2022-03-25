@@ -1,10 +1,6 @@
-
-
-
-
-rm nachos -rf
 mkdir nachos
 cd nachos
+rm NachOS-4.0 -rf
 
 # wget https://www.fit.hcmus.edu.vn/~ntquan/os/assignment/nachos_40.tar.gz
 # tar zxvf nachos_40.tar.gz
@@ -18,12 +14,17 @@ if [ "$1" ]
 
 mv NachOS-Source NachOS-4.0
 
-wget https://www.fit.hcmus.edu.vn/~ntquan/os/assignment/mips-decstation.linux-xgcc.gz
-tar zxvf mips-decstation.linux-xgcc.gz
+if [[ -f "/my_dir/nachos/mips-decstation.linux-xgcc.gz" ]]
+then
+    echo "mips-decstation.linux-xgcc.gz exists."
+else
+	wget https://www.fit.hcmus.edu.vn/~ntquan/os/assignment/mips-decstation.linux-xgcc.gz
+	tar zxvf mips-decstation.linux-xgcc.gz
+fi
 
-wget https://www.fit.hcmus.edu.vn/~ntquan/os/assignment/nachos-gcc.diff.gz
-tar zxvf nachos-gcc.diff.gz
-patch -p0 < nachos-gcc.diff
+# wget https://www.fit.hcmus.edu.vn/~ntquan/os/assignment/nachos-gcc.diff.gz
+# tar zxvf nachos-gcc.diff.gz
+# patch -p0 < nachos-gcc.diff
 
 
 cd NachOS-4.0
@@ -33,8 +34,13 @@ make
 
 ./nachos
 
-cd ../../coff2noff
-make
-# cd ../code/test
+# cd ../../coff2noff
 # make
-# ../build.linux/nachos -x halt
+
+cd ../test &&
+if [ "$2" ]
+   	then
+	make clean &&
+	make &&
+	../build.linux/nachos -x "$2" -d u
+ fi
